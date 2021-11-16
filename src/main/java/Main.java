@@ -4,6 +4,7 @@ import models.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -63,7 +64,9 @@ public class Main {
     }
 
     private static void getMarketInfosAboutSpecificCars(List<Car> listOfCars, String producer, boolean isAutomatic, int trunkCapacity) {
-        List<Car> listOfSpecificCars = createListOfSpecificCars(listOfCars, producer, isAutomatic, trunkCapacity);
+        List<Car> listOfSpecificCars = listOfCars.stream()
+                .filter(x -> x.isCarMeetsTheConditions(producer, isAutomatic, trunkCapacity))
+                .collect(Collectors.toList());
         if (listOfSpecificCars.isEmpty()) {
             System.out.println("There is no cars with that specific parameters.");
         } else {
@@ -72,16 +75,6 @@ public class Main {
                 car.printCarInformation();
             }
         }
-    }
-
-    private static List<Car> createListOfSpecificCars(List<Car> list, String producer, boolean isAutomatic, int trunkCapacity) {
-        List<Car> listOfCarsWithSpecificParameters = new ArrayList<>();
-        for (Car car : list) {
-            if (car.isCarMeetsTheConditions(producer, isAutomatic, trunkCapacity)) {
-                listOfCarsWithSpecificParameters.add(car);
-            }
-        }
-        return listOfCarsWithSpecificParameters;
     }
 }
 
